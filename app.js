@@ -18,6 +18,25 @@ document.addEventListener('keydown', event => {
 });
 window.matchMedia('(min-width: 761px)').addEventListener('change', closeMenu);
 
+const lightbox = document.querySelector('#lightbox');
+if (lightbox) {
+  const lightboxImage = lightbox.querySelector('img');
+  const lightboxCaption = lightbox.querySelector('p');
+  document.querySelectorAll('[data-lightbox]').forEach(link => {
+    link.addEventListener('click', event => {
+      if (typeof lightbox.showModal !== 'function') return;
+      event.preventDefault();
+      lightboxImage.src = link.getAttribute('href');
+      lightboxImage.alt = link.dataset.alt || '';
+      lightboxCaption.textContent = link.dataset.caption || '';
+      lightbox.showModal();
+    });
+  });
+  lightbox.addEventListener('click', event => {
+    if (event.target === lightbox || event.target.closest('.lightbox-close')) lightbox.close();
+  });
+}
+
 document.querySelectorAll('.copy-email').forEach(button => {
   button.addEventListener('click', async () => {
     const address = button.dataset.email;
